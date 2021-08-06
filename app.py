@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 import os
 import glob
 from datetime import datetime
-
+import PySimpleGUI as sg
 
 # if app don't work
 # pip install openpyxl
@@ -31,8 +31,14 @@ def manipulateXls(xls, destination, origin, preserveOriginalFilename):
         folderName = item[0]
         if folderName != None:
             keywordsTemp = item[1:]
-            destinationTemp = (os.path.join(destination, folderName))
-            copyAllFiles(origin, destinationTemp, keywordsTemp, folderName, preserveOriginalFilename)
+            destinationTemp = os.path.join(destination, folderName)
+            copyAllFiles(
+                origin,
+                destinationTemp,
+                keywordsTemp,
+                folderName,
+                preserveOriginalFilename,
+            )
         else:
             print("\n\n\n!!--!!--!!\t\t Empty row A: Folder Name\n\n")
 
@@ -45,8 +51,7 @@ def nowCurrentTime():
 
 def readAndPrintInitValues(origin, destination, xlsName):
     print("\n*** YOUR VALUES ***")
-    print(
-        "*** Excel filename\n\t" + xlsName )
+    print("*** Excel filename\n\t" + xlsName)
     print("*** source folder\n\t" + origin)
     print("*** destination\n\t" + destination + "\n\n")
 
@@ -89,10 +94,10 @@ def copyAllFiles(origin, destination, keyWords, folderName, preserveOriginalFile
     print("\n++ Files found: \t")
 
     for f in glob.glob(origin, recursive=True):
-        if (filterArray([os.path.basename(f)], keyWords, f)):
+        if filterArray([os.path.basename(f)], keyWords, f):
             listOfAllFilesFullPath.append(f)
             print("\t" + os.path.basename(f))
-    if (len(listOfAllFilesFullPath) == 0):
+    if len(listOfAllFilesFullPath) == 0:
         print("\t-- !! -- \t Nothing -> List is empty\n\n\n")
         return False
 
@@ -103,25 +108,50 @@ def copyAllFiles(origin, destination, keyWords, folderName, preserveOriginalFile
         for fileName in listOfAllFilesFullPath:
             if os.walk(fileName):
                 shutil.copy(fileName, destination)
-                fileTempPath = (os.path.join(destination, os.path.basename(fileName)))
+                fileTempPath = os.path.join(destination, os.path.basename(fileName))
                 keyWordBuilder = "_".join(keyWords)
-                extension = (os.path.splitext(fileName)[1])
+                extension = os.path.splitext(fileName)[1]
                 if not (preserveOriginalFilename):
-                    if (id == 0):
-                        os.rename(fileTempPath, destination + "/" + keyWordBuilder + extension)
+                    if id == 0:
+                        os.rename(
+                            fileTempPath, destination + "/" + keyWordBuilder + extension
+                        )
                     else:
-                        os.rename(fileTempPath, destination + "/" + keyWordBuilder + "__(" + str(id) + ")" + extension)
+                        os.rename(
+                            fileTempPath,
+                            destination
+                            + "/"
+                            + keyWordBuilder
+                            + "__("
+                            + str(id)
+                            + ")"
+                            + extension,
+                        )
                 else:
-                    if (id == 0):
-                        os.rename(fileTempPath,
-                                  destination + "/" + str(os.path.basename(
-                                      fileName))
-                                  + "___#" + keyWordBuilder + "#___" + extension)
+                    if id == 0:
+                        os.rename(
+                            fileTempPath,
+                            destination
+                            + "/"
+                            + str(os.path.basename(fileName))
+                            + "___#"
+                            + keyWordBuilder
+                            + "#___"
+                            + extension,
+                        )
                     else:
-                        os.rename(fileTempPath,
-                                  destination + "/" + str(os.path.basename(
-                                      fileName))
-                                  + "___#" + keyWordBuilder + "#__(" + str(id) + ")" + extension)
+                        os.rename(
+                            fileTempPath,
+                            destination
+                            + "/"
+                            + str(os.path.basename(fileName))
+                            + "___#"
+                            + keyWordBuilder
+                            + "#__("
+                            + str(id)
+                            + ")"
+                            + extension,
+                        )
 
                 id = id + 1
         print("++ Files copied successfully \n\n\n")
@@ -130,4 +160,47 @@ def copyAllFiles(origin, destination, keyWords, folderName, preserveOriginalFile
         print("\n--!!!--\t Fail during copying files")
 
 
-app()
+def gui():
+    sizeText = (25, 1)
+    sizeInput = (80, 1)
+    sg.theme("DarkBlue")  # Add a touch of color
+    # All the stuff inside your window.
+    layout = [
+        [sg.Text("Some text on Row 1")],
+        [
+            sg.Text("Search Folders (with subfolders)", size=sizeText),
+            sg.InputText(size=sizeInput),
+            sg.FolderBrowse(),
+        ],
+        [
+            sg.Text("Destination Path (where copy files)", size=sizeText),
+            sg.InputText(size=sizeInput),
+            sg.FolderBrowse(),
+        ],
+        [
+            sg.Text("Xls Name (Excel file) ", size=sizeText),
+            sg.InputText(size=sizeInput),
+            sg.FolderBrowse(),
+        ],
+        [
+            sg.Text("Preserve Original Filename ", size=sizeText),
+            sg.InputText(size=sizeInput),
+            sg.FolderBrowse(),
+        ],
+        [sg.Button("Ok"), sg.Button("Cancel")],
+    ]
+
+    window = sg.Window("Excel Finder", layout)
+    while True:
+        event, values = window.read()
+        if (
+            event == sg.WIN_CLOSED or event == "Cancel"
+        ):  # if user closes window or clicks cancel
+            break
+        print("You entered ", values[0])
+    window.close()
+
+
+# app()
+
+gui()
