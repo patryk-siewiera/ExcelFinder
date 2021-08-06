@@ -4,6 +4,8 @@ import os
 import glob
 from datetime import datetime
 import PySimpleGUI as sg
+import json
+import codecs
 
 # if app don't work
 # pip install openpyxl
@@ -160,47 +162,71 @@ def copyAllFiles(origin, destination, keyWords, folderName, preserveOriginalFile
         print("\n--!!!--\t Fail during copying files")
 
 
-def gui():
+def loadJson():
+    with codecs.open("userData.json", "r", "utf-8") as jsonFile:
+        data = json.load(jsonFile)
+        return data
+
+
+def writeJson():
+    with codecs.open("userData.json", "w", "utf-8") as jsonFile:
+        # json.dump(tempDict, jsonFile)
+        return 0
+
+
+def gui(data):
+    print(data)
     sizeText = (25, 1)
     sizeInput = (80, 1)
-    sg.theme("DarkBlue")  # Add a touch of color
-    # All the stuff inside your window.
+    buttonsSize = (15, 1)
+    sg.theme("DarkBlue3")
     layout = [
-        [sg.Text("Some text on Row 1")],
         [
             sg.Text("Search Folders (with subfolders)", size=sizeText),
-            sg.InputText(size=sizeInput),
+            sg.InputText(
+                size=sizeInput, default_text=data["searchFolder"], key="searchFolder"
+            ),
             sg.FolderBrowse(),
         ],
         [
             sg.Text("Destination Path (where copy files)", size=sizeText),
-            sg.InputText(size=sizeInput),
+            sg.InputText(
+                size=sizeInput,
+                default_text=data["destinationPath"],
+                key="destinationPath",
+            ),
             sg.FolderBrowse(),
         ],
         [
             sg.Text("Xls Name (Excel file) ", size=sizeText),
-            sg.InputText(size=sizeInput),
+            sg.InputText(size=sizeInput, default_text=data["xlsName"], key="xlsName"),
             sg.FolderBrowse(),
         ],
         [
-            sg.Text("Preserve Original Filename ", size=sizeText),
-            sg.InputText(size=sizeInput),
-            sg.FolderBrowse(),
+            sg.Checkbox(
+                size=sizeText,
+                default=bool(eval(data["preserveOriginalFilename"])),
+                text="Preserve Original Filename",
+                key="preserveOriginalFilename",
+            ),
         ],
-        [sg.Button("Ok"), sg.Button("Cancel")],
+        [sg.Button("Save", size=buttonsSize, button_color="green")],
+        [sg.Button("Close App", size=buttonsSize, button_color="#541001")],
     ]
 
     window = sg.Window("Excel Finder", layout)
     while True:
         event, values = window.read()
         if (
-            event == sg.WIN_CLOSED or event == "Cancel"
+            event == sg.WIN_CLOSED or event == "Close App"
         ):  # if user closes window or clicks cancel
             break
-        print("You entered ", values[0])
+        print("You entered ", values)
     window.close()
 
 
 # app()
 
-gui()
+data = loadJson()
+
+gui(data)
