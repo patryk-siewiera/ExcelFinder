@@ -177,7 +177,7 @@ def writeJson():
 def gui(data):
     print(data)
     sizeText = (25, 1)
-    sizeInput = (80, 1)
+    sizeInput = (90, 1)
     buttonsSize = (15, 1)
     sg.theme("DarkBlue3")
     layout = [
@@ -200,7 +200,9 @@ def gui(data):
         [
             sg.Text("Xls Name (Excel file) ", size=sizeText),
             sg.InputText(size=sizeInput, default_text=data["xlsName"], key="xlsName"),
-            sg.FolderBrowse(),
+            sg.FileBrowse(
+                file_types=(("Excel", ("*.xlsx", "*.xlsm", "*.xltx", "*.xltm")),)
+            ),
         ],
         [
             sg.Checkbox(
