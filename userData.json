@@ -1,7 +1,7 @@
 {
     "searchFolder": "C:/Users/sievr/Downloads/KKCE",
     "destinationPath": "C:/Users/sievr/Downloads/KKCE/solution/here_paste_solutions",
-    "xlsName": "C:/Users/sievr/Downloads/KKCE/solution/fsadsfs.xlsx",
-    "preserveOriginalFilename": true,
-    "generateTimestamp": false
+    "xlsName": "C:/Users/sievr/Downloads/KKCE/solution/excelData - Copy - Copy.xlsx",
+    "preserveOriginalFilename": false,
+    "generateTimestamp": true
 }

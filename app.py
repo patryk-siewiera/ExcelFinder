@@ -94,7 +94,7 @@ def filterArray(array, keyWords, path):
 def copyAllFiles(origin, destination, keyWords, folderName, preserveOriginalFilename):
     listOfAllFilesFullPath = []
     keyWords = [x for x in keyWords if x is not None]
-    print("\n------ FOLDER NAME:\t", folderName)
+    print("\n\n------ FOLDER NAME:\t\t", folderName)
     print("------ KEYWORDS:\t", keyWords)
     if not keyWords:
         return print("!!--!!--!! \t\t\t Keywords not found ")
@@ -231,8 +231,7 @@ def gui(data):
         [
             sg.Button("Ok", size=buttonsSize, button_color="green"),
             sg.Button("Read XLS", size=buttonsSize, button_color="brown"),
-            sg.Button("Close and Save", size=buttonsSize, button_color="#025248"),
-            sg.Button("Close without save", size=buttonsSize, button_color="#541001"),
+            sg.Button("Close", size=buttonsSize, button_color="#541001"),
         ],
     ]
 
@@ -240,8 +239,9 @@ def gui(data):
     while True:
         event, values = window.read()
         if (
-            event == sg.WIN_CLOSED or event == "Close without save"
+            event == sg.WIN_CLOSED or event == "Close"
         ):  # if user closes window or clicks cancel
+            writeJson(values)
             print("\nAPP CLOSED")
             break
         elif event == "Ok":
@@ -249,21 +249,19 @@ def gui(data):
             print("\n\nSCRIPT START")
             app(values)
             window.close()
-        elif event == "Close and Save":
-            writeJson(values)
-            print("++ Values saved for future correctly\nAPP CLOSED")
-            break
         elif event == "Read XLS":
             guiReadXls(values)
 
 
 def guiReadXls(data):
     xls = readXlsAndReturnValues(data["xlsName"])
-    print("\n** Excel Values:")
+    print("\n*********\n\n** Excel Values:")
     for index in range(len(xls)):
-        print("Folder name:", xls[index][0])
+        print("\n\nFolder name:\t", xls[index][0])
+        print("tags:")
         for item in range(1, len(xls[index])):
-            print("\t-", xls[index][item])
+            print("\t", xls[index][item])
+    print("\n** end of XLS")
 
 
 # app()
