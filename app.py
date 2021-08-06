@@ -11,19 +11,23 @@ import codecs
 # pip install openpyxl
 
 
-def app():
+def app(data):
     # *********** EDIT ME
-    searchFolder = r"C:\Users\sievr\Downloads\KKCE\wnioski materiałowe"
-    destinationPath = r"C:\Users\sievr\Downloads\KKCE\solution\here_paste_solutions"
-    xlsName = r"C:\Users\sievr\Downloads\KKCE\solution\excelData.xlsx"
-    preserveOriginalFilename = True
+    # searchFolder = r"C:\Users\sievr\Downloads\KKCE\wnioski materiałowe"
+    # destinationPath = r"C:\Users\sievr\Downloads\KKCE\solution\here_paste_solutions"
+    # xlsName = r"C:\Users\sievr\Downloads\KKCE\solution\excelData.xlsx"
+    # preserveOriginalFilename = True
+
+    searchFolder = data["searchFolder"]
+    destinationPath = data["destinationPath"]
+    xlsName = data["xlsName"]
+    preserveOriginalFilename = data["preserveOriginalFilename"]
 
     # --------------------------------
     searchSubfolders = "\**"
     origin = searchFolder + searchSubfolders
     destination = os.path.join(destinationPath, nowCurrentTime())
 
-    readAndPrintInitValues(origin, destination, xlsName)
     xls = readXlsAndReturnValues(xlsName)
     manipulateXls(xls, destination, origin, preserveOriginalFilename)
 
@@ -51,19 +55,19 @@ def nowCurrentTime():
     return str(nowTime)
 
 
-def readAndPrintInitValues(origin, destination, xlsName):
-    print("\n*** YOUR VALUES ***")
-    print("*** Excel filename\n\t" + xlsName)
-    print("*** source folder\n\t" + origin)
-    print("*** destination\n\t" + destination + "\n\n")
-
-
 def readXlsAndReturnValues(xlsName):
+    newFilteredList = []
     wb = load_workbook(xlsName)
     sheet = wb.active
     rows_iter = sheet.iter_rows(max_col=sheet.max_column, max_row=sheet.max_row)
     allValuesFromXLS = [[cell.value for cell in list(row)] for row in rows_iter]
-    return allValuesFromXLS
+
+    # remove "None" from values
+    for index in range(len(allValuesFromXLS)):
+        tempList = list(filter(None, allValuesFromXLS[index]))
+        if len(tempList) > 0:
+            newFilteredList.append(tempList)
+    return newFilteredList
 
 
 def createFolderIfNotExist(pathToNewFolder):
@@ -168,14 +172,19 @@ def loadJson():
         return data
 
 
-def writeJson():
+def writeJson(data):
+    newDict = {
+        "searchFolder": data["searchFolder"],
+        "destinationPath": data["destinationPath"],
+        "xlsName": data["xlsName"],
+        "preserveOriginalFilename": data["preserveOriginalFilename"],
+        "generateTimestamp": data["generateTimestamp"],
+    }
     with codecs.open("userData.json", "w", "utf-8") as jsonFile:
-        # json.dump(tempDict, jsonFile)
-        return 0
+        json.dump(newDict, jsonFile, ensure_ascii=False, indent=4)
 
 
 def gui(data):
-    print(data)
     sizeText = (25, 1)
     sizeInput = (90, 1)
     buttonsSize = (15, 1)
@@ -206,25 +215,50 @@ def gui(data):
         ],
         [
             sg.Checkbox(
-                size=sizeText,
-                default=bool(eval(data["preserveOriginalFilename"])),
+                default=(data["preserveOriginalFilename"]),
                 text="Preserve Original Filename",
                 key="preserveOriginalFilename",
             ),
         ],
-        [sg.Button("Save", size=buttonsSize, button_color="green")],
-        [sg.Button("Close App", size=buttonsSize, button_color="#541001")],
+        [
+            sg.Checkbox(
+                default=(data["generateTimestamp"]),
+                text="Generate Timestamp (date and hour)",
+                key="generateTimestamp",
+            ),
+        ],
+        [
+            sg.Button("Ok", size=buttonsSize, button_color="green"),
+            sg.Button("Read XLS", size=buttonsSize, button_color="brown"),
+            sg.Button("Close and Save", size=buttonsSize, button_color="#025248"),
+            sg.Button("Close without save", size=buttonsSize, button_color="#541001"),
+        ],
     ]
 
     window = sg.Window("Excel Finder", layout)
     while True:
         event, values = window.read()
         if (
-            event == sg.WIN_CLOSED or event == "Close App"
+            event == sg.WIN_CLOSED or event == "Close without save"
         ):  # if user closes window or clicks cancel
+            print("\nAPP CLOSED")
             break
-        print("You entered ", values)
-    window.close()
+        elif event == "Ok":
+            writeJson(values)
+            print("\n\nSCRIPT START")
+            app(values)
+            window.close()
+        elif event == "Close and Save":
+            writeJson(values)
+            print("++ Values saved for future correctly\nAPP CLOSED")
+            break
+        elif event == "Read XLS":
+            guiReadXls(values)
+
+
+def guiReadXls(data):
+    xls = readXlsAndReturnValues(data["xlsName"])
+    print(xls)
 
 
 # app()
