@@ -66,6 +66,7 @@ def readXlsAndReturnValues(xlsName):
     for index in range(len(allValuesFromXLS)):
         tempList = list(filter(None, allValuesFromXLS[index]))
         if len(tempList) > 0:
+            tempList = list(dict.fromkeys(tempList))  # remove duplicates
             newFilteredList.append(tempList)
     return newFilteredList
 
@@ -216,14 +217,14 @@ def gui(data):
         [
             sg.Checkbox(
                 default=(data["preserveOriginalFilename"]),
-                text="Preserve Original Filename",
+                text="Preserve Original Filename (TODO CORRECTLY WORK)",
                 key="preserveOriginalFilename",
             ),
         ],
         [
             sg.Checkbox(
                 default=(data["generateTimestamp"]),
-                text="Generate Timestamp (date and hour)",
+                text="Generate Timestamp (date and hour) (TODO: DONT WORK)",
                 key="generateTimestamp",
             ),
         ],
@@ -258,7 +259,11 @@ def gui(data):
 
 def guiReadXls(data):
     xls = readXlsAndReturnValues(data["xlsName"])
-    print(xls)
+    print("\n** Excel Values:")
+    for index in range(len(xls)):
+        print("Folder name:", xls[index][0])
+        for item in range(1, len(xls[index])):
+            print("\t-", xls[index][item])
 
 
 # app()
