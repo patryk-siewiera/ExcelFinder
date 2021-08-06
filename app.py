@@ -12,18 +12,11 @@ import codecs
 
 
 def app(data):
-    # *********** EDIT ME
-    # searchFolder = r"C:\Users\sievr\Downloads\KKCE\wnioski materiałowe"
-    # destinationPath = r"C:\Users\sievr\Downloads\KKCE\solution\here_paste_solutions"
-    # xlsName = r"C:\Users\sievr\Downloads\KKCE\solution\excelData.xlsx"
-    # preserveOriginalFilename = True
-
     searchFolder = data["searchFolder"]
     destinationPath = data["destinationPath"]
     xlsName = data["xlsName"]
     preserveOriginalFilename = data["preserveOriginalFilename"]
 
-    # --------------------------------
     searchSubfolders = "\**"
     origin = searchFolder + searchSubfolders
     destination = os.path.join(destinationPath, nowCurrentTime())
