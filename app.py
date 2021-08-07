@@ -181,7 +181,7 @@ def writeJson(data):
 
 def gui(data):
     sizeText = (25, 1)
-    sizeInput = (90, 1)
+    sizeInput = (100, 1)
     buttonsSize = (20, 1)
     sg.theme("DarkBlue3")
     layout = [
@@ -191,7 +191,7 @@ def gui(data):
                 size=sizeInput, default_text=data["searchFolder"], key="searchFolder"
             ),
             sg.FolderBrowse(),
-            sg.Button("Open Search Folder", size=buttonsSize, button_color="#2c23e8"),
+            sg.Button("Open Search Folder", size=buttonsSize, button_color="#56a653"),
         ],
         [
             sg.Text("Destination Path (where copy files)", size=sizeText),
@@ -202,7 +202,7 @@ def gui(data):
             ),
             sg.FolderBrowse(),
             sg.Button(
-                "Open Destination Folder", size=buttonsSize, button_color="#2c23e8"
+                "Open Destination Folder", size=buttonsSize, button_color="#56a653"
             ),
         ],
         [
@@ -211,6 +211,7 @@ def gui(data):
             sg.FileBrowse(
                 file_types=(("Excel", ("*.xlsx", "*.xlsm", "*.xltx", "*.xltm")),)
             ),
+            sg.Button("Open Excel File", size=buttonsSize, button_color="#56a653"),
         ],
         [
             sg.Checkbox(
@@ -255,6 +256,15 @@ def gui(data):
                 webbrowser.open(os.path.realpath(path))
             else:
                 print("Destination: Path don't exist")
+        elif event == "Open Excel File":
+            path = values["xlsName"]
+            print(path)
+            if os.path.isfile(path):
+                # this should be async
+                sg.popup("Save and Close Excel File to continue...")
+                os.system(os.path.realpath(path))
+            else:
+                print("Excel: File don't exist")
         elif event == "Ok":
             writeJson(values)
             print("\n\nSCRIPT START")

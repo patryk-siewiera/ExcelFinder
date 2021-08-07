@@ -1,7 +1,7 @@
 {
-    "searchFolder": "C:/Users/sievr/Downloads/KKCE543",
-    "destinationPath": "C:/Users/sievr/Downloads/KKCE/solution/here_paste_solutions/2021-08-07__09-47-27/folder332",
+    "searchFolder": "C:/Users/sievr/Downloads/KKCE/solution/here_paste_solutions",
+    "destinationPath": "C:/Users/sievr/Downloads/KKCE/solution/here_paste_solutions/2021-08-07__09-47-27/folder3",
     "xlsName": "C:/Users/sievr/Downloads/KKCE/solution/fsadsfs.xlsx",
-    "preserveOriginalFilename": false,
-    "generateTimestamp": true
+    "preserveOriginalFilename": true,
+    "generateTimestamp": false
 }
