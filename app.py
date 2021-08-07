@@ -9,7 +9,8 @@ import codecs
 import webbrowser
 
 # if app don't work
-# pip install openpyxl
+# pip install openpyxl,
+# TODO: requ
 
 
 def app(data):
