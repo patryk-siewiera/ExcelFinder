@@ -6,6 +6,7 @@ from datetime import datetime
 import PySimpleGUI as sg
 import json
 import codecs
+import webbrowser
 
 # if app don't work
 # pip install openpyxl
@@ -181,7 +182,7 @@ def writeJson(data):
 def gui(data):
     sizeText = (25, 1)
     sizeInput = (90, 1)
-    buttonsSize = (15, 1)
+    buttonsSize = (20, 1)
     sg.theme("DarkBlue3")
     layout = [
         [
@@ -190,6 +191,7 @@ def gui(data):
                 size=sizeInput, default_text=data["searchFolder"], key="searchFolder"
             ),
             sg.FolderBrowse(),
+            sg.Button("Open Search Folder", size=buttonsSize, button_color="#2c23e8"),
         ],
         [
             sg.Text("Destination Path (where copy files)", size=sizeText),
@@ -199,6 +201,9 @@ def gui(data):
                 key="destinationPath",
             ),
             sg.FolderBrowse(),
+            sg.Button(
+                "Open Destination Folder", size=buttonsSize, button_color="#2c23e8"
+            ),
         ],
         [
             sg.Text("Xls Name (Excel file) ", size=sizeText),
@@ -231,24 +236,36 @@ def gui(data):
     window = sg.Window("Excel Finder", layout)
     while True:
         event, values = window.read()
-        if (
-            event == sg.WIN_CLOSED or event == "Close"
-        ):  # if user closes window or clicks cancel
+        if event == "Close":  # if user closes window or clicks cancel
             writeJson(values)
-            print("\nAPP CLOSED")
+            print("\nAPP CLOSED, DATA SAVED")
             break
+        elif event == sg.WIN_CLOSED:
+            print("\nAPP CLOSED, SETTINGS DISCARDED")
+            break
+        elif event == "Open Search Folder":
+            path = values["searchFolder"]
+            if os.path.isdir(path):
+                webbrowser.open(os.path.realpath(path))
+            else:
+                print("Search: Path don't exist")
+        elif event == "Open Destination Folder":
+            path = values["destinationPath"]
+            if os.path.isdir(path):
+                webbrowser.open(os.path.realpath(path))
+            else:
+                print("Destination: Path don't exist")
         elif event == "Ok":
             writeJson(values)
             print("\n\nSCRIPT START")
             app(values)
-            window.close()
         elif event == "Read XLS":
             guiReadXls(values)
 
 
 def guiReadXls(data):
     xls = readXlsAndReturnValues(data["xlsName"])
-    print("\n*********\n\n** Excel Values:")
+    print("\n******************\n\n** Excel Values:")
     for index in range(len(xls)):
         print("\n\nFolder name:\t", xls[index][0])
         print("tags:")
