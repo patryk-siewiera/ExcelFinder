@@ -1,6 +1,7 @@
 {
-	"searchFolder": "C:/Users/sievr/Downloads/KKCE/wnioski materiałowe",
-	"destinationPath": "C:/Users/sievr/Downloads/KKCE/solution/here_paste_solutions",
-	"xlsName": "C:/Users/sievr/Downloads/KKCE/solution/excelData.xlsx",
-	"preserveOriginalFilename": "True"
+    "searchFolder": "C:/Users/sievr/Downloads/KKCE/solution/here_paste_solutions",
+    "destinationPath": "C:/Users/sievr/Downloads/KKCE/solution/here_paste_solutions/2021-08-07__09-47-27/folder3",
+    "xlsName": "C:/Users/sievr/Downloads/KKCE/solution/fsadsfs.xlsx",
+    "preserveOriginalFilename": true,
+    "generateTimestamp": false
 }

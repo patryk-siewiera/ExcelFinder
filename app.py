@@ -7,10 +7,10 @@ import PySimpleGUI as sg
 import json
 import codecs
 import webbrowser
+import asyncio
 
 # if app don't work
 # pip install openpyxl,
-# TODO: requ
 
 
 def app(data):
