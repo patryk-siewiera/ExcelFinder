@@ -19,30 +19,50 @@ def app(data):
     destinationPath = data["destinationPath"]
     xlsName = data["xlsName"]
     preserveOriginalFilename = data["preserveOriginalFilename"]
+    generateSubfolders = data["generateSubfolders"]
 
     searchSubfolders = "\**"
     origin = searchFolder + searchSubfolders
     destination = os.path.join(destinationPath, nowCurrentTime())
 
     xls = readXlsAndReturnValues(xlsName)
-    manipulateXls(xls, destination, origin, preserveOriginalFilename)
+    manipulateXls(
+        xls, destination, origin, preserveOriginalFilename, generateSubfolders
+    )
 
 
-def manipulateXls(xls, destination, origin, preserveOriginalFilename):
-    for item in xls:
-        folderName = item[0]
-        if folderName != None:
-            keywordsTemp = item[1:]
-            destinationTemp = os.path.join(destination, folderName)
-            copyAllFiles(
-                origin,
-                destinationTemp,
-                keywordsTemp,
-                folderName,
-                preserveOriginalFilename,
-            )
-        else:
-            print("\n\n\n!!--!!--!!\t\t Empty row A: Folder Name\n\n")
+def manipulateXls(
+    xls, destination, origin, preserveOriginalFilename, generateSubfolders
+):
+    if generateSubfolders:
+        for item in xls:
+            folderName = item[0]
+            if folderName != None:
+                keywordsTemp = item[1:]
+                destinationTemp = os.path.join(destination, folderName)
+                copyAllFiles(
+                    origin,
+                    destinationTemp,
+                    keywordsTemp,
+                    folderName,
+                    preserveOriginalFilename,
+                )
+            else:
+                print("\n\n\n!!--!!--!!\t\t Empty row A: Folder Name\n\n")
+    else:
+        for item in xls:
+            folderName = destination
+            if folderName != None:
+                keywordsTemp = item[1:]
+                copyAllFiles(
+                    origin,
+                    destination,
+                    keywordsTemp,
+                    folderName,
+                    preserveOriginalFilename,
+                )
+            else:
+                print("\n\n\n!!--!!--!!\t\t Empty row A: Folder Name\n\n")
 
 
 def nowCurrentTime():
@@ -176,6 +196,7 @@ def writeJson(data):
         "xlsName": data["xlsName"],
         "preserveOriginalFilename": data["preserveOriginalFilename"],
         "generateTimestamp": data["generateTimestamp"],
+        "generateSubfolders": data["generateSubfolders"],
     }
     with codecs.open("userData.json", "w", "utf-8") as jsonFile:
         json.dump(newDict, jsonFile, ensure_ascii=False, indent=4)
@@ -232,6 +253,13 @@ def gui(data):
                 default=(data["generateTimestamp"]),
                 text="Generate Timestamp (date and hour) (TODO: DONT WORK)",
                 key="generateTimestamp",
+            ),
+        ],
+        [
+            sg.Checkbox(
+                default=(data["generateSubfolders"]),
+                text="Generate Subfolders (unchecked -> everything in one folder)",
+                key="generateSubfolders",
             ),
         ],
         [
