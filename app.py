@@ -179,7 +179,7 @@ def copyAllFiles(
         print("++ Files copied successfully \n\n\n")
         id = 0
     except:
-        print("\n--!!!--\t Fail during copying files")
+        print("\n--!!!--\t Errors during copying files")
 
 
 def loadJson():
