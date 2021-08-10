@@ -8,6 +8,7 @@ import json
 import codecs
 import webbrowser
 import asyncio
+import threading
 
 # if app don't work
 # pip install openpyxl,
@@ -195,7 +196,10 @@ def gui(data):
             sg.Button("Open Search Folder", size=buttonsSize, button_color="#56a653"),
         ],
         [
-            sg.Text("Destination Path (where copy files)", size=sizeText),
+            sg.Text(
+                "Destination Path (where copy files)",
+                size=sizeText,
+            ),
             sg.InputText(
                 size=sizeInput,
                 default_text=data["destinationPath"],
@@ -206,6 +210,7 @@ def gui(data):
                 "Open Destination Folder", size=buttonsSize, button_color="#56a653"
             ),
         ],
+        [sg.Text("Destination, if folder dont exist will be created ")],
         [
             sg.Text("Xls Name (Excel file) ", size=sizeText),
             sg.InputText(size=sizeInput, default_text=data["xlsName"], key="xlsName"),
@@ -214,10 +219,11 @@ def gui(data):
             ),
             sg.Button("Open Excel File", size=buttonsSize, button_color="#56a653"),
         ],
+        [sg.Text(" ")],
         [
             sg.Checkbox(
                 default=(data["preserveOriginalFilename"]),
-                text="Preserve Original Filename (TODO CORRECTLY WORK)",
+                text="Preserve Original Filename",
                 key="preserveOriginalFilename",
             ),
         ],
@@ -256,7 +262,7 @@ def gui(data):
             if os.path.isdir(path):
                 webbrowser.open(os.path.realpath(path))
             else:
-                print("Destination: Path don't exist")
+                print("Destination: Path don't exist, Folder WILL BE CREATED")
         elif event == "Open Excel File":
             path = values["xlsName"]
             print(path)
