@@ -34,35 +34,20 @@ def app(data):
 def manipulateXls(
     xls, destination, origin, preserveOriginalFilename, generateSubfolders
 ):
-    if generateSubfolders:
-        for item in xls:
-            folderName = item[0]
-            if folderName != None:
-                keywordsTemp = item[1:]
-                destinationTemp = os.path.join(destination, folderName)
-                copyAllFiles(
-                    origin,
-                    destinationTemp,
-                    keywordsTemp,
-                    folderName,
-                    preserveOriginalFilename,
-                )
-            else:
-                print("\n\n\n!!--!!--!!\t\t Empty row A: Folder Name\n\n")
-    else:
-        for item in xls:
-            folderName = destination
-            if folderName != None:
-                keywordsTemp = item[1:]
-                copyAllFiles(
-                    origin,
-                    destination,
-                    keywordsTemp,
-                    folderName,
-                    preserveOriginalFilename,
-                )
-            else:
-                print("\n\n\n!!--!!--!!\t\t Empty row A: Folder Name\n\n")
+    for item in xls:
+        folderName = item[0]
+        if folderName != None:
+            keywordsTemp = item[1:]
+            copyAllFiles(
+                origin,
+                destination,
+                keywordsTemp,
+                folderName,
+                preserveOriginalFilename,
+                generateSubfolders,
+            )
+        else:
+            print("\n\n\n!!--!!--!!\t\t Empty row A: Folder Name\n\n")
 
 
 def nowCurrentTime():
@@ -107,7 +92,22 @@ def filterArray(array, keyWords, path):
         return True
 
 
-def copyAllFiles(origin, destination, keyWords, folderName, preserveOriginalFilename):
+def copyAllFiles(
+    origin,
+    destination,
+    keyWords,
+    folderName,
+    preserveOriginalFilename,
+    generateSubfolders,
+):
+    if not generateSubfolders:
+        folderName = destination
+    else:
+        destination = os.path.join(str(destination), str(folderName))
+
+    print("dest ", destination)
+    print("fold ", folderName)
+
     listOfAllFilesFullPath = []
     keyWords = [x for x in keyWords if x is not None]
     print("\n\n------ FOLDER NAME:\t\t", folderName)
@@ -173,10 +173,10 @@ def copyAllFiles(origin, destination, keyWords, folderName, preserveOriginalFile
                             + "#__("
                             + str(id)
                             + ")"
-                            + extension,
+                            + +extension,
                         )
 
-                id = id + 1
+            id = id + 1
         print("++ Files copied successfully \n\n\n")
         id = 0
     except:
