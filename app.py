@@ -107,9 +107,6 @@ def copyAllFiles(
     else:
         destination = os.path.join(str(destination), str(folderName))
 
-    print("dest ", destination)
-    print("fold ", folderName)
-
     listOfAllFilesFullPath = []
     keyWords = [x for x in keyWords if x is not None]
     print("\n\n------ FOLDER NAME:\t\t", folderName)
