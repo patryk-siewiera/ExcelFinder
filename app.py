@@ -1,14 +1,11 @@
 import shutil
 from openpyxl import load_workbook
 import os
-import glob
 from datetime import datetime
 import PySimpleGUI as sg
 import json
 import codecs
 import webbrowser
-import asyncio
-import threading
 
 # if app don't work
 # pip install openpyxl,
@@ -323,8 +320,5 @@ def guiReadXls(data):
     print("\n** end of XLS")
 
 
-# app()
-
 data = loadJson()
-
 gui(data)
