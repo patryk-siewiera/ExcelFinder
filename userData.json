@@ -3,6 +3,6 @@
     "destinationPath": "C:/Users/sievr/Downloads/KKCE/solution/new",
     "xlsName": "C:/Users/sievr/Downloads/KKCE/solution/excelData.xlsx",
     "preserveOriginalFilename": true,
-    "generateTimestamp": false,
+    "generateTimestamp": true,
     "generateSubfolders": true
 }

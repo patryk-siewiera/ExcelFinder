@@ -20,10 +20,14 @@ def app(data):
     xlsName = data["xlsName"]
     preserveOriginalFilename = data["preserveOriginalFilename"]
     generateSubfolders = data["generateSubfolders"]
+    generateTimestamp = data["generateTimestamp"]
 
     searchSubfolders = "\**"
     origin = searchFolder + searchSubfolders
-    destination = os.path.join(destinationPath, nowCurrentTime())
+    if generateTimestamp:
+        destination = os.path.join(destinationPath, nowCurrentTime())
+    else:
+        destination = destinationPath
 
     xls = readXlsAndReturnValues(xlsName)
     manipulateXls(
@@ -251,7 +255,7 @@ def gui(data):
         [
             sg.Checkbox(
                 default=(data["generateTimestamp"]),
-                text="Generate Timestamp (date and hour) (TODO: DONT WORK)",
+                text="Generate Timestamp (date and hour)",
                 key="generateTimestamp",
             ),
         ],
