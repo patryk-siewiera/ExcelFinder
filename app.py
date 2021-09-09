@@ -130,50 +130,51 @@ def copyAllFiles(
         for fileName in listOfAllFilesFullPath:
             if os.walk(fileName):
                 shutil.copy(fileName, destination)
-                fileTempPath = os.path.join(destination, os.path.basename(fileName))
-                keyWordBuilder = "_".join(keyWords)
-                extension = os.path.splitext(fileName)[1]
-                if not (preserveOriginalFilename):
-                    if id == 0:
-                        os.rename(
-                            fileTempPath, destination + "/" + keyWordBuilder + extension
-                        )
-                    else:
-                        os.rename(
-                            fileTempPath,
-                            destination
-                            + "/"
-                            + keyWordBuilder
-                            + "__("
-                            + str(id)
-                            + ")"
-                            + extension,
-                        )
-                else:
-                    if id == 0:
-                        os.rename(
-                            fileTempPath,
-                            destination
-                            + "/"
-                            + str(os.path.basename(fileName))
-                            + "___#"
-                            + keyWordBuilder
-                            + "#___"
-                            + extension,
-                        )
-                    else:
-                        os.rename(
-                            fileTempPath,
-                            destination
-                            + "/"
-                            + str(os.path.basename(fileName))
-                            + "___#"
-                            + keyWordBuilder
-                            + "#__("
-                            + str(id)
-                            + ")"
-                            + +extension,
-                        )
+                # fileTempPath = os.path.join(destination, os.path.basename(fileName))
+                # keyWordBuilder = "_".join(keyWords)
+                # extension = os.path.splitext(fileName)[1]
+                # if not (preserveOriginalFilename):
+                #     if id == 0:
+                #         os.rename(
+                #             fileTempPath, destination + "/" + keyWordBuilder + extension
+                #         )
+                #     else:
+                #         os.rename(
+                #             fileTempPath,
+                #             destination
+                #             + "/"
+                #             + keyWordBuilder
+                #             + "__("
+                #             + str(id)
+                #             + ")"
+                #             + extension,
+                #         )
+                if preserveOriginalFilename:
+                    print("elo")
+                    # if id == 0:
+                    #     os.rename(
+                    #         fileTempPath,
+                    #         destination
+                    #         + "/"
+                    #         + str(os.path.basename(fileName))
+                    #         + "___#"
+                    #         + keyWordBuilder
+                    #         + "#___"
+                    #         + extension,
+                    #     )
+                    # else:
+                    #     os.rename(
+                    #         fileTempPath,
+                    #         destination
+                    #         + "/"
+                    #         + str(os.path.basename(fileName))
+                    #         + "___#"
+                    #         + keyWordBuilder
+                    #         + "#__("
+                    #         + str(id)
+                    #         + ")"
+                    #         + +extension,
+                    #     )
 
             id = id + 1
         print("++ Files copied successfully \n\n\n")
