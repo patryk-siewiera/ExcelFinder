@@ -1,8 +1,8 @@
 {
-    "searchFolder": "C:/Users/sievr/Downloads/wnioski materiałowe/search_here",
-    "destinationPath": "C:/Users/sievr/Downloads/wnioski materiałowe/rozwiazanie",
-    "xlsName": "C:/Users/sievr/Downloads/wnioski materiałowe/excelData.xlsx",
+    "searchFolder": "C:\\Users\\sievr\\Downloads\\example_search\\search_here",
+    "destinationPath": "C:\\Users\\sievr\\Downloads\\example_search\\solution_here",
+    "xlsName": "C:\\Users\\sievr\\Downloads\\example_search\\excel.xlsx",
     "preserveOriginalFilename": true,
     "generateTimestamp": true,
-    "generateSubfolders": true
+    "generateSubfolders": false
 }
