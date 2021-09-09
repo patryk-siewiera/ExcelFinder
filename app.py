@@ -39,12 +39,14 @@ def manipulateXls(
     for item in xls:
         folderName = item[0]
         if folderName != None:
-            keywordsTemp = item[1:]
+            allFilesThisNameInFolder = item[1]
+            keywordsTemp = item[2:]
             copyAllFiles(
                 origin,
                 destination,
                 keywordsTemp,
                 folderName,
+                allFilesThisNameInFolder,
                 preserveOriginalFilename,
                 generateSubfolders,
             )
@@ -99,9 +101,11 @@ def copyAllFiles(
     destination,
     keyWords,
     folderName,
+    allFilesThisNameInFolder,
     preserveOriginalFilename,
     generateSubfolders,
 ):
+
     if not generateSubfolders:
         folderName = destination
     else:
@@ -110,7 +114,11 @@ def copyAllFiles(
     listOfAllFilesFullPath = []
     keyWords = [x for x in keyWords if x is not None]
     print("\n\n------ FOLDER NAME:\t\t", folderName)
-    print("------ KEYWORDS:\t", keyWords)
+    print(
+        "------ NAME FILES LIKE THIS (IF DON'T PERSERVE FILENAMES):\n\t\t\t\t",
+        allFilesThisNameInFolder,
+    )
+    print("------ KEYWORDS:\t\t", keyWords)
     if not keyWords:
         return print("!!--!!--!! \t\t\t Keywords not found ")
     print("\n++ Files found: \t")
@@ -125,58 +133,27 @@ def copyAllFiles(
 
     try:
         createFolderIfNotExist(destination)
-        id = 0
         # copy and rename
+        id = 0
         for fileName in listOfAllFilesFullPath:
             if os.walk(fileName):
-                shutil.copy(fileName, destination)
-                # fileTempPath = os.path.join(destination, os.path.basename(fileName))
-                # keyWordBuilder = "_".join(keyWords)
-                # extension = os.path.splitext(fileName)[1]
-                # if not (preserveOriginalFilename):
-                #     if id == 0:
-                #         os.rename(
-                #             fileTempPath, destination + "/" + keyWordBuilder + extension
-                #         )
-                #     else:
-                #         os.rename(
-                #             fileTempPath,
-                #             destination
-                #             + "/"
-                #             + keyWordBuilder
-                #             + "__("
-                #             + str(id)
-                #             + ")"
-                #             + extension,
-                #         )
+                fileTempPath = os.path.join(destination, os.path.basename(fileName))
+                extension = os.path.splitext(fileName)[1]
                 if preserveOriginalFilename:
-                    print("elo")
-                    # if id == 0:
-                    #     os.rename(
-                    #         fileTempPath,
-                    #         destination
-                    #         + "/"
-                    #         + str(os.path.basename(fileName))
-                    #         + "___#"
-                    #         + keyWordBuilder
-                    #         + "#___"
-                    #         + extension,
-                    #     )
-                    # else:
-                    #     os.rename(
-                    #         fileTempPath,
-                    #         destination
-                    #         + "/"
-                    #         + str(os.path.basename(fileName))
-                    #         + "___#"
-                    #         + keyWordBuilder
-                    #         + "#__("
-                    #         + str(id)
-                    #         + ")"
-                    #         + +extension,
-                    #     )
-
-            id = id + 1
+                    shutil.copy(fileName, destination)
+                elif preserveOriginalFilename == False:
+                    id = id + 1
+                    shutil.copy(fileName, destination)
+                    os.rename(
+                        fileTempPath,
+                        destination
+                        + "/"
+                        + allFilesThisNameInFolder
+                        + " ("
+                        + str(id)
+                        + ")"
+                        + extension,
+                    )
         print("++ Files copied successfully \n\n\n")
         id = 0
     except:
@@ -310,6 +287,7 @@ def gui(data):
 
 def guiReadXls(data):
     xls = readXlsAndReturnValues(data["xlsName"])
+    print((xls))
     print("\n******************\n\n** Excel Values:")
     for index in range(len(xls)):
         print("\n\nFolder name:\t", xls[index][0])

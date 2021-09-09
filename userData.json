@@ -1,7 +1,7 @@
 {
-    "searchFolder": "C:/Users/sievr/Downloads/KKCE/wnioski materiałowe/",
-    "destinationPath": "C:/Users/sievr/Downloads/KKCE/solution/new",
-    "xlsName": "C:/Users/sievr/Downloads/KKCE/solution/excelData2.xlsx",
+    "searchFolder": "C:/Users/sievr/Downloads/wnioski materiałowe/search_here",
+    "destinationPath": "C:/Users/sievr/Downloads/wnioski materiałowe/rozwiazanie",
+    "xlsName": "C:/Users/sievr/Downloads/wnioski materiałowe/excelData.xlsx",
     "preserveOriginalFilename": true,
     "generateTimestamp": true,
     "generateSubfolders": true
